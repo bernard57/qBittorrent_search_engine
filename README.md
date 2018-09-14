@@ -2,3 +2,4 @@
 Search engine for qBittorrent:
 
 -KickAss torrent search engine
+-Il Corsaro Blu torrent search engine
