@@ -1,4 +1,4 @@
-#VERSION: 1.0
+#VERSION: 1.1
 #AUTHORS: mauricci
 
 from helpers import retrieve_url
@@ -15,7 +15,8 @@ except ImportError:
 class corsaroblu(object):
     url = 'https://www.ilcorsaroblu.org'
     name = 'Il Corsaro Blu'
-    supported_categories = {'all': 'all'}
+    #13%3B14%3B15%3B25%3B17%3B11%3B21 = 13;14;15;25;17;11;21
+    supported_categories = {'all': '0', 'movies': '13%3B14%3B15%3B25%3B17%3B11%3B21', 'tv': '19%3B20%3B24', 'music': '2', 'games': '3'}
     
     class MyHTMLParser(HTMLParser):
 
@@ -45,7 +46,7 @@ class corsaroblu(object):
                      self.singleResData['desc_link'] = 'https://www.ilcorsaroblu.org/' + Dict['href']
 
         def handle_endtag(self, tag):
-            if tag == 'tbody':
+            if tag == 'table':
                 self.tableFound = False
             if tag == 'td':
                 self.insideTd = False
@@ -81,13 +82,14 @@ class corsaroblu(object):
     # DO NOT CHANGE the name and parameters of this function
     # This function will be the one called by nova2.py
     def search(self, what, cat='all'):
-        currCat = self.supported_categories.get(cat,'all')
+        #if user provides wrong category, let's search with the default category
+        currCat = self.supported_categories.get(cat, self.supported_categories['all'])
         parser = self.MyHTMLParser()
 
         #analyze firt 10 pages of results
         for currPage in range(1,11):
-            url = self.url+'/index.php?page=torrents&search={0}&pages={2}'.format(what,currCat,currPage)
-            print(url)
+            url = self.url+'/index.php?page=torrents&search={0}&category={1}&pages={2}'.format(what,currCat,currPage)
+            #print(url)
             html = retrieve_url(url)
             parser.feed(html)
         #print(parser.fullResData)
