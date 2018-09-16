@@ -51,11 +51,11 @@ class kickass_torrent(object):
             if tag == 'tr':
                 self.tdCount = -1
                 if len(self.singleResData) > 0:
-                    self.fullResData.append(self.singleResData)
                     #ignore trash stuff
                     if self.singleResData['name'] != '-1' and self.singleResData['size'].find(',') == -1 \
                       and not self.singleResData['name'].startswith('Advertising'):
                         prettyPrinter(self.singleResData)
+                        self.fullResData.append(self.singleResData)
                     self.singleResData = self.getSingleData()
 
         def handle_data(self, data):

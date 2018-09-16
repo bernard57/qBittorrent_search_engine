@@ -54,13 +54,13 @@ class corsaroblu(object):
             if tag == 'tr':
                 self.tdCount = -1
                 if len(self.singleResData) > 0:
-                    self.fullResData.append(self.singleResData)
                     #ignore trash stuff
                     if self.singleResData['name'] != '-1' and self.singleResData['size'].find(',') == -1:
                         #ignore those with link and desc_link equals to -1
                         if (self.singleResData['desc_link'] != '-1' or self.singleResData['link'] != '-1') \
                            and self.singleResData['link'] != self.singleResData['desc_link']:
                             prettyPrinter(self.singleResData)
+                            self.fullResData.append(self.singleResData)
                     self.singleResData = self.getSingleData()
 
         def handle_data(self, data):     
