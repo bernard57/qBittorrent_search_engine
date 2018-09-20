@@ -1,4 +1,4 @@
-#VERSION: 1.2
+#VERSION: 1.3
 #AUTHORS: mauricci
 
 from helpers import retrieve_url
@@ -24,7 +24,6 @@ class kickass_torrent(object):
             HTMLParser.__init__(self)
             self.url = 'https://kickass-cr.online'
             self.insideDataTd = False
-            self.tableFound = False
             self.tdCount = -1
             self.tableCount = -1
             self.infoMap = {'name':0,'size':1}
@@ -37,21 +36,19 @@ class kickass_torrent(object):
         def handle_starttag(self, tag, attrs):
             #print("Encountered a start tag:", tag)
             if tag == 'table':
-                self.tableFound = True
                 self.tableCount += 1
             if tag == 'td':
                 self.tdCount += 1
                 if self.tableCount == 1:
                     self.insideDataTd = True
-            if self.tableFound and tag == 'a' and len(attrs) > 0:
+            if self.insideDataTd and tag == 'a' and len(attrs) > 0:
                  Dict = dict(attrs)
-                 if self.infoMap['name'] == self.tdCount and 'href' in Dict:
-                     self.singleResData['desc_link'] = self.url + '/' + Dict['href']
+                 if self.infoMap['name'] == self.tdCount and 'href' in Dict \
+                    and Dict.get('class','').find('cellMainLink') != -1:
+                     self.singleResData['desc_link'] = self.url + Dict['href']
                      self.singleResData['link'] = self.singleResData['desc_link']
 
         def handle_endtag(self, tag):
-            if tag == 'table':
-                self.tableFound = False
             if tag == 'td':
                 self.insideDataTd = False
             if tag == 'tr':
@@ -60,7 +57,6 @@ class kickass_torrent(object):
                     #ignore trash stuff
                     if self.singleResData['name'] != '-1' and self.isValidSize(self.singleResData['size']) \
                       and not self.singleResData['name'].startswith('Advertising'):
-                        print(self.singleResData)
                         prettyPrinter(self.singleResData)
                         self.fullResData.append(self.singleResData)
                     self.singleResData = self.getSingleData()
