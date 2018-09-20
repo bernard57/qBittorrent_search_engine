@@ -99,16 +99,16 @@ class mejor(object):
             """ Downloader """
             html = retrieve_url(info)
             m = re.search('(<a.*?>Descargar</a>)', html)
-            if m is not None and m.group(1) is not None:
+            if m and len(m.groups()) > 0:
                 torrentAnchor = m.group(1)
                 torrentLink1 = re.search('href=[\'\"](.+?)[\'\"]',torrentAnchor)
-                if torrentLink1 is not None and torrentLink1.group(1) is not None:
+                if torrentLink1 and len(torrentLink1.groups()) > 0:
                     torrentUrl = self.url + '/' + torrentLink1.group(1)
                     html = retrieve_url(torrentUrl)
                     torrentLink2 = re.search('<a.*?href=[\'\"](.+?\.torrent)[\'\"]>',html)
-                    if torrentLink2 is not None and torrentLink2.group(1) is not None:
+                    if torrentLink2 and len(torrentLink2.groups()) > 0:
                         #download_file is tested and downloads correctly the .torrent file
-                        #starting from the desc_url from the torrent choosen. Anyway qBittorrent won't download anything
+                        #starting from the desc_url from the torrent choosen.
                         print(download_file(torrentLink2.group(1)))
 
 if __name__ == "__main__":

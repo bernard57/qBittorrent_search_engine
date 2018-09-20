@@ -106,11 +106,11 @@ class corsaronero(object):
             """ Downloader """
             html = retrieve_url(info)
             m = re.search('(<a.*? class=".*?magnet".*?>)', html)
-            if m is not None:
+            if m and len(m.groups()) > 0:
                 magnetAnchor = m.group(1)
-                if magnetAnchor is not None:
+                if magnetAnchor:
                     magnetLink = re.search('href="(.+?)"',magnetAnchor)
-                    if magnetLink is not None and magnetLink.group(1) is not None:
+                    if magnetLink and len(magnetLink.groups()) > 0:
                         print(magnetLink.group(1) + ' ' + info)
 
 if __name__ == "__main__":
