@@ -1,4 +1,4 @@
-#VERSION: 1.1
+#VERSION: 1.2
 #AUTHORS: mauricci
 
 from helpers import retrieve_url
@@ -20,16 +20,19 @@ class corsaronero(object):
     
     class MyHTMLParser(HTMLParser):
 
-        def getSingleData(self):
-            return {'name':'-1','seeds':'-1','leech':'-1','size':'-1','link':'-1','desc_link':'-1','engine_url':'CorsaroNero',}
+        def __init__(self):
+            HTMLParser.__init__(self)
+            self.url = 'http://ilcorsaroneros.info'
+            self.insideTd = False
+            self.insideDataTd = False
+            self.tableCount = -1
+            self.tdCount = -1
+            self.infoMap = {'name':1,'size':2,'seeds':5,'leech':6}
+            self.fullResData = []
+            self.singleResData = self.getSingleData()
 
-        insideTd = False
-        insideDataTd = False
-        tableCount = -1
-        tdCount = -1
-        infoMap = {'name':1,'size':2,'seeds':5,'leech':6}
-        fullResData = []
-        singleResData = getSingleData(None)
+        def getSingleData(self):
+            return {'name':'-1','seeds':'-1','leech':'-1','size':'-1','link':'-1','desc_link':'-1','engine_url':self.url}
         
         def handle_starttag(self, tag, attrs):
             if tag == 'table':
@@ -102,15 +105,13 @@ class corsaronero(object):
     def download_torrent(self, info):
             """ Downloader """
             html = retrieve_url(info)
-            m = re.search('(<a.*? class="forbtn magnet".*?>)', html)
+            m = re.search('(<a.*? class=".*?magnet".*?>)', html)
             if m is not None:
                 magnetAnchor = m.group(1)
                 if magnetAnchor is not None:
                     magnetLink = re.search('href="(.+?)"',magnetAnchor)
                     if magnetLink is not None and magnetLink.group(1) is not None:
-                        #at the moment it retrives the magnet url
-                        #but it cant'be downloaded by download_file
-                        print(magnetLink.group(1))
+                        print(magnetLink.group(1) + ' ' + info)
 
 if __name__ == "__main__":
     c = corsaronero()

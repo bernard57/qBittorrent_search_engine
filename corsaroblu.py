@@ -1,4 +1,4 @@
-#VERSION: 1.1
+#VERSION: 1.2
 #AUTHORS: mauricci
 
 from helpers import retrieve_url
@@ -19,17 +19,20 @@ class corsaroblu(object):
     supported_categories = {'all': '0', 'movies': '13%3B14%3B15%3B25%3B17%3B11%3B21', 'tv': '19%3B20%3B24', 'music': '2', 'games': '3'}
     
     class MyHTMLParser(HTMLParser):
+    
+        def __init__(self):
+            HTMLParser.__init__(self)
+            self.url = 'https://www.ilcorsaroblu.org'
+            self.insideTd = False
+            self.insideDataTd = False
+            self.tableFound = False
+            self.tdCount = -1
+            self.infoMap = {'name':1,'torrLink':3,'size':9,'seeds':6,'leech':7}
+            self.fullResData = []
+            self.singleResData = self.getSingleData()
 
         def getSingleData(self):
-            return {'name':'-1','seeds':'-1','leech':'-1','size':'-1','link':'-1','desc_link':'-1','engine_url':'CorsaroBlu',}
-
-        insideTd = False
-        insideDataTd = False
-        tableFound = False
-        tdCount = -1
-        infoMap = {'name':1,'torrLink':3,'size':9,'seeds':6,'leech':7}
-        fullResData = []
-        singleResData = getSingleData(None)
+            return {'name':'-1','seeds':'-1','leech':'-1','size':'-1','link':'-1','desc_link':'-1','engine_url':self.url}
         
         def handle_starttag(self, tag, attrs):
             if tag == 'td':

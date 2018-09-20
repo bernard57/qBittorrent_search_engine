@@ -1,4 +1,4 @@
-#VERSION: 1.0
+#VERSION: 1.1
 #AUTHORS: mauricci
 
 from helpers import retrieve_url
@@ -20,17 +20,20 @@ class mejor(object):
     
     class MyHTMLParser(HTMLParser):
 
-        def getSingleData(self):
-            return {'name':'-1','seeds':'-1','leech':'-1','size':'-1','link':'-1','desc_link':'-1','engine_url':'MejorTorrent',}
+        def __init__(self):
+            HTMLParser.__init__(self)
+            self.url = 'http://www.mejortorrent.org'
+            self.insideTd = False
+            self.insideDataTd = False
+            self.tableCount = -1
+            self.tdCount = -1
+            self.infoMap = {'name': 0}
+            self.fullResData = []
+            self.singleResData = self.getSingleData()
 
-        insideTd = False
-        insideDataTd = False
-        tableCount = -1
-        tdCount = -1
-        infoMap = {'name': 0}
-        fullResData = []
-        singleResData = getSingleData(None)
-        
+        def getSingleData(self):
+            return {'name':'-1','seeds':'-1','leech':'-1','size':'-1','link':'-1','desc_link':'-1','engine_url': self.url}
+    
         def handle_starttag(self, tag, attrs):
             if tag == 'table':
                 self.tableCount += 1
