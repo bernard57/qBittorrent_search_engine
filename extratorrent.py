@@ -84,7 +84,7 @@ class extratorrent(object):
     # DO NOT CHANGE the name and parameters of this function
     # This function will be the one called by nova2.py
     def search(self, what, cat='all'):
-        currCat = self.supported_categories.get(cat,self.supported_categories['all'])
+        currCat = self.supported_categories[cat]
         parser = self.MyHTMLParser()
 
         #analyze firt 10 pages of results

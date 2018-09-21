@@ -56,8 +56,7 @@ class kickass_torrent(object):
                 self.tdCount = -1
                 if len(self.singleResData) > 0:
                     #ignore trash stuff
-                    if self.singleResData['name'] != '-1' and self.isValidSize(self.singleResData['size']) \
-                      and not self.singleResData['name'].startswith('Advertising'):
+                    if self.singleResData['name'] != '-1' and self.isValidSize(self.singleResData['size']):
                         prettyPrinter(self.singleResData)
                         self.fullResData.append(self.singleResData)
                     self.singleResData = self.getSingleData()
@@ -93,14 +92,12 @@ class kickass_torrent(object):
                     if index != -1:
                         singleData['name'] = string[:index].strip()
 
-
     # DO NOT CHANGE the name and parameters of this function
     # This function will be the one called by nova2.py
     def search(self, what, cat='all'):
+        currCat = self.supported_categories[cat]
         what = what.replace('%20','-')
-        currCat = self.supported_categories.get(cat,'all')
         parser = self.MyHTMLParser()
-
         #analyze firt 10 pages of results
         for currPage in range(1,11):
             url = self.url+'/search/{0}/{1}/'.format(what,currPage)
@@ -110,11 +107,6 @@ class kickass_torrent(object):
         #print(parser.fullResData)   
         data = parser.fullResData
         parser.close()
-
-
-    def download_torrent(self, info):
-        """ Downloader """
-        #KickAss html does not contain tor or magnet link. They are added with javascript
 
 if __name__ == "__main__":
     k = kickass_torrent()
