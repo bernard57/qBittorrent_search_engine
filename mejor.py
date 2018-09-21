@@ -1,4 +1,4 @@
-#VERSION: 1.1
+#VERSION: 1.2
 #AUTHORS: mauricci
 
 from helpers import retrieve_url
@@ -23,6 +23,7 @@ class mejor(object):
         def __init__(self):
             HTMLParser.__init__(self)
             self.url = 'http://www.mejortorrent.org'
+            self.TABLE_INDEX = 15
             self.insideTd = False
             self.insideDataTd = False
             self.tableCount = -1
@@ -40,13 +41,13 @@ class mejor(object):
             if tag == 'td':
                 self.insideTd = True
                 Dict = dict(attrs)
-                if self.tableCount == 15:
+                if self.tableCount == self.TABLE_INDEX:
                     self.insideDataTd = True
                     self.tdCount += 1
             if self.insideDataTd and tag == 'a' and len(attrs) > 0:
                  Dict = dict(attrs)
                  if self.infoMap['name'] == self.tdCount and 'href' in Dict:
-                     self.singleResData['desc_link'] = 'http://www.mejortorrent.org' + Dict['href']
+                     self.singleResData['desc_link'] = self.url + Dict['href']
                      self.singleResData['link'] = self.singleResData['desc_link']
 
         def handle_endtag(self, tag):
@@ -58,7 +59,6 @@ class mejor(object):
                 if len(self.singleResData) > 0:
                     #ignore trash stuff
                     if self.singleResData['name'] != '-1':
-                        #ignore those with link and desc_link equals to -1
                         if (self.singleResData['desc_link'] != '-1' or self.singleResData['link'] != '-1'):
                             prettyPrinter(self.singleResData)
                             self.fullResData.append(self.singleResData)

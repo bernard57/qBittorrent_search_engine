@@ -1,4 +1,4 @@
-#VERSION: 1.3
+#VERSION: 1.4
 #AUTHORS: mauricci
 
 from helpers import retrieve_url
@@ -23,6 +23,7 @@ class kickass_torrent(object):
         def __init__(self):
             HTMLParser.__init__(self)
             self.url = 'https://kickass-cr.online'
+            self.TABLE_INDEX = 1
             self.insideDataTd = False
             self.tdCount = -1
             self.tableCount = -1
@@ -39,7 +40,7 @@ class kickass_torrent(object):
                 self.tableCount += 1
             if tag == 'td':
                 self.tdCount += 1
-                if self.tableCount == 1:
+                if self.tableCount == self.TABLE_INDEX:
                     self.insideDataTd = True
             if self.insideDataTd and tag == 'a' and len(attrs) > 0:
                  Dict = dict(attrs)

@@ -1,4 +1,4 @@
-#VERSION: 1.2
+#VERSION: 1.3
 #AUTHORS: mauricci
 
 from helpers import retrieve_url
@@ -23,6 +23,7 @@ class corsaronero(object):
         def __init__(self):
             HTMLParser.__init__(self)
             self.url = 'http://ilcorsaroneros.info'
+            self.TABLE_INDEX = 4
             self.insideTd = False
             self.insideDataTd = False
             self.tableCount = -1
@@ -40,7 +41,7 @@ class corsaronero(object):
             if tag == 'td':
                 self.insideTd = True
                 Dict = dict(attrs)
-                if self.tableCount == 4:
+                if self.tableCount == self.TABLE_INDEX:
                     self.insideDataTd = True
                     self.tdCount += 1
             if self.insideDataTd and tag == 'a' and len(attrs) > 0:

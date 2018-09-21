@@ -1,4 +1,4 @@
-#VERSION: 1.2
+#VERSION: 1.3
 #AUTHORS: mauricci
 
 from helpers import retrieve_url
@@ -23,9 +23,9 @@ class corsaroblu(object):
         def __init__(self):
             HTMLParser.__init__(self)
             self.url = 'https://www.ilcorsaroblu.org'
-            self.insideTd = False
+            self.TABLE_INDEX = 9
             self.insideDataTd = False
-            self.tableFound = False
+            self.tableCount = -1
             self.tdCount = -1
             self.infoMap = {'name':1,'torrLink':3,'size':9,'seeds':6,'leech':7}
             self.fullResData = []
@@ -35,13 +35,14 @@ class corsaroblu(object):
             return {'name':'-1','seeds':'-1','leech':'-1','size':'-1','link':'-1','desc_link':'-1','engine_url':self.url}
         
         def handle_starttag(self, tag, attrs):
+            if tag == 'table':
+                self.tableCount += 1
             if tag == 'td':
-                self.insideTd = True
                 Dict = dict(attrs)
-                if Dict.get('class','').find('lista') != -1:
+                if self.tableCount == self.TABLE_INDEX:
                     self.insideDataTd = True
                     self.tdCount += 1
-            if self.tableFound and self.insideTd and tag == 'a' and len(attrs) > 0:
+            if self.insideDataTd and tag == 'a' and len(attrs) > 0:
                  Dict = dict(attrs)
                  if self.infoMap['torrLink'] == self.tdCount and 'href' in Dict:
                      self.singleResData['link'] = 'https://www.ilcorsaroblu.org/' + Dict['href']
@@ -49,10 +50,7 @@ class corsaroblu(object):
                      self.singleResData['desc_link'] = 'https://www.ilcorsaroblu.org/' + Dict['href']
 
         def handle_endtag(self, tag):
-            if tag == 'table':
-                self.tableFound = False
             if tag == 'td':
-                self.insideTd = False
                 self.insideDataTd = False
             if tag == 'tr':
                 self.tdCount = -1
@@ -67,19 +65,15 @@ class corsaroblu(object):
                     self.singleResData = self.getSingleData()
 
         def handle_data(self, data):     
-            if self.insideTd:
-                if data.strip().startswith('Torrents Added'):
-                    self.tableFound = True
-            if self.insideDataTd and self.tableFound:        
-                if self.tableFound:    
-                    for key,val in self.infoMap.items():
-                        if self.tdCount == val:
-                            currKey = key
-                            if currKey in self.singleResData and data.strip() != '':
-                                if self.singleResData[currKey] == '-1':
-                                    self.singleResData[currKey] = data.strip()
-                                else:
-                                    self.singleResData[currKey] += data.strip()
+            if self.insideDataTd:   
+                for key,val in self.infoMap.items():
+                    if self.tdCount == val:
+                        currKey = key
+                        if currKey in self.singleResData and data.strip() != '':
+                            if self.singleResData[currKey] == '-1':
+                                self.singleResData[currKey] = data.strip()
+                            else:
+                                self.singleResData[currKey] += data.strip()
 
 
     # DO NOT CHANGE the name and parameters of this function
