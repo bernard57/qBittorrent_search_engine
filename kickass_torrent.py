@@ -1,4 +1,4 @@
-#VERSION: 1.4
+#VERSION: 1.5
 #AUTHORS: mauricci
 
 from helpers import retrieve_url
@@ -73,6 +73,12 @@ class kickass_torrent(object):
                             else:
                                 self.singleResData[currKey] += data.strip()
 
+        def feed(self,html):
+            HTMLParser.feed(self,html)
+            self.insideDataTd = False
+            self.tdCount = -1
+            self.tableCount = -1
+
         #true if the size is valid (must contain number and no ',')
         def isValidSize(self, size):
             return size.find(',') == -1 and bool(re.search(r'\d', size))
@@ -101,7 +107,7 @@ class kickass_torrent(object):
             html = retrieve_url(url)
             parser.feed(html)
             parser.adjustName()
-        #print(parser.fullResData)
+        #print(parser.fullResData)   
         data = parser.fullResData
         parser.close()
 

@@ -1,4 +1,4 @@
-#VERSION: 1.2
+#VERSION: 1.3
 #AUTHORS: mauricci
 
 from helpers import retrieve_url
@@ -75,6 +75,12 @@ class mejor(object):
                                 self.singleResData[currKey] = data.strip()
                             else:
                                 self.singleResData[currKey] += data.strip()
+
+        def feed(self,html):
+            HTMLParser.feed(self,html)
+            self.insideDataTd = False
+            self.tdCount = -1
+            self.tableCount = -1
 
 
     # DO NOT CHANGE the name and parameters of this function
