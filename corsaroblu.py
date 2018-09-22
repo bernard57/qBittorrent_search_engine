@@ -1,4 +1,4 @@
-#VERSION: 1.4
+#VERSION: 1.5
 #AUTHORS: mauricci
 
 from helpers import retrieve_url
@@ -56,10 +56,10 @@ class corsaroblu(object):
                 self.tdCount = -1
                 if len(self.singleResData) > 0:
                     #ignore trash stuff
-                    if self.singleResData['name'] != '-1' and self.singleResData['size'].find(',') == -1:
+                    if self.singleResData['name'] != '-1' and self.singleResData['size'].find(',') == -1 \
+                       and self.singleResData['name'].lower() != 'nome':
                         #ignore those with link and desc_link equals to -1
-                        if (self.singleResData['desc_link'] != '-1' or self.singleResData['link'] != '-1') \
-                           and self.singleResData['link'] != self.singleResData['desc_link']:
+                        if (self.singleResData['desc_link'] != '-1' or self.singleResData['link'] != '-1'):
                             prettyPrinter(self.singleResData)
                             self.fullResData.append(self.singleResData)
                     self.singleResData = self.getSingleData()
