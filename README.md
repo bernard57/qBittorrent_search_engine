@@ -1,5 +1,5 @@
 # qBittorrent_search_engine
-Search engine for qBittorrent:
+Search engine for [qBittorrent](https://www.qbittorrent.org/):
 
 - KickAss torrent search engine
 - Il Corsaro Blu torrent search engine
@@ -7,3 +7,7 @@ Search engine for qBittorrent:
 - Mejor torrent search engine
 - Extra torrent search engine
 - TorrentFunk search engine
+
+## Installation
+Install the plugin by:
+<kbd>Search tab</kbd> 🡪 <kbd>Search Plugins</kbd> 🡪 <kbd>Install a new one</kbd> 🡪 Select the `plugin.py` file.
