@@ -7,6 +7,7 @@ Search engine for [qBittorrent](https://www.qbittorrent.org/):
 - Mejor torrent search engine
 - Extra torrent search engine
 - TorrentFunk search engine
+- CineCalidad search engine
 
 ## Installation
 Install the plugin by:
