@@ -8,6 +8,7 @@ Search engine for [qBittorrent](https://www.qbittorrent.org/):
 - Extra torrent search engine
 - TorrentFunk search engine
 - CineCalidad search engine
+- SoloTorrent search engine
 
 ## Installation
 Install the plugin by:
