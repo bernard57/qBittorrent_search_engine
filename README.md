@@ -9,6 +9,7 @@ Search engine for [qBittorrent](https://www.qbittorrent.org/):
 - TorrentFunk search engine
 - CineCalidad search engine
 - SoloTorrent search engine
+- ETTV search engine
 
 ## Installation
 Install the plugin by:
