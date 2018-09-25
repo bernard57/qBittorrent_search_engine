@@ -82,16 +82,6 @@ class kickass_torrent(object):
         def isValidSize(self, size):
             return size.find(',') == -1 and bool(re.search(r'\d', size))
 
-        #remove who uploaded the torrent
-        def adjustName(self):
-            for singleData in self.fullResData:
-                string = singleData['name']
-                if string != '-1':
-                    #remove uploaded... from name of torrent
-                    index = string.find('Posted by')
-                    if index != -1:
-                        singleData['name'] = string[:index].strip()
-
     # DO NOT CHANGE the name and parameters of this function
     # This function will be the one called by nova2.py
     def search(self, what, cat='all'):
@@ -103,7 +93,6 @@ class kickass_torrent(object):
             url = self.url+'/search/{0}/{1}/'.format(what,currPage)
             html = retrieve_url(url)
             parser.feed(html)
-            parser.adjustName()
         #print(parser.fullResData)   
         data = parser.fullResData
         parser.close()
