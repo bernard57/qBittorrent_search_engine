@@ -1,4 +1,4 @@
-#VERSION: 1.4
+#VERSION: 1.5
 #AUTHORS: mauricci
 
 from helpers import retrieve_url
@@ -96,8 +96,8 @@ class corsaronero(object):
         currCat = self.supported_categories[cat]
         parser = self.MyHTMLParser()
 
-        #analyze firt 10 pages of results
-        for currPage in range(1,11):
+        #analyze firt page of results (thre are 40 entries)
+        for currPage in range(1,2):
             url = self.url+'/argh.php?search={0}&page={1}'.format(what,currPage)
             #print(url)
             html = retrieve_url(url)
