@@ -86,6 +86,7 @@ class mejor(object):
     # DO NOT CHANGE the name and parameters of this function
     # This function will be the one called by nova2.py
     def search(self, what, cat='all'):
+        what = what.replace('%20','+')
         currCat = self.supported_categories[cat]
         parser = self.MyHTMLParser()
 
