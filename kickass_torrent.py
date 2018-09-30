@@ -1,4 +1,4 @@
-#VERSION: 1.5
+#VERSION: 1.6
 #AUTHORS: mauricci
 
 from helpers import retrieve_url
@@ -88,13 +88,24 @@ class kickass_torrent(object):
         currCat = self.supported_categories[cat]
         what = what.replace('%20','-')
         parser = self.MyHTMLParser()
-        #analyze firt 10 pages of results
-        for currPage in range(1,11):
+        #analyze exact number of pages (but maximum is 25)
+        pageNum = 25
+        currPage = 1
+        while currPage <= pageNum:
             url = self.url+'/search/{0}/{1}/'.format(what,currPage)
             html = retrieve_url(url)
+            pgNumber = re.search('\s?page\s?\d\s?of\s?(\d+)',html)
+            if currPage == 1 and pgNumber and len(pgNumber.groups()) > 0:
+                try:
+                    #we set a maximum limit of 25 pages
+                    pageNum = min(pageNum, int(pgNumber.group(1)))
+                except:
+                    pass
             parser.feed(html)
+            currPage += 1
         #print(parser.fullResData)   
         data = parser.fullResData
+        print(len(data))
         parser.close()
 
 if __name__ == "__main__":
