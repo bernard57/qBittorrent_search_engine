@@ -1,4 +1,4 @@
-#VERSION: 1.5
+#VERSION: 1.6
 #AUTHORS: mauricci
 
 from helpers import retrieve_url
@@ -27,7 +27,7 @@ class corsaroblu(object):
             self.insideDataTd = False
             self.tableCount = -1
             self.tdCount = -1
-            self.infoMap = {'name':1,'torrLink':3,'size':9,'seeds':6,'leech':7}
+            self.infoMap = {'name':1,'torrLink':3,'size':8,'seeds':6,'leech':7}
             self.fullResData = []
             self.singleResData = self.getSingleData()
 
