@@ -95,13 +95,6 @@ class kickass_torrent(object):
             url = self.url+'/usearch/{0}/{1}/'.format(what,currPage)
             #print(url)
             html = retrieve_url(url)
-            pgNumber = re.search('\s?page\s?\d\s?of\s?(\d+)',html)
-            if currPage == 1 and pgNumber and len(pgNumber.groups()) > 0:
-                try:
-                    #we set a maximum limit of 25 pages
-                    pageNum = min(pageNum, int(pgNumber.group(1)))
-                except:
-                    pass
             parser.feed(html)
             currPage += 1
         #print(parser.fullResData)   
