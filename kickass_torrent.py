@@ -1,4 +1,4 @@
-#VERSION: 1.6
+#VERSION: 1.7
 #AUTHORS: mauricci
 
 from helpers import retrieve_url
@@ -14,7 +14,7 @@ except ImportError:
     from HTMLParser import HTMLParser
          
 class kickass_torrent(object):
-    url = 'https://kickass-cr.online'
+    url = 'https://kickass2.biz'
     name = 'KickAss torrent'
     supported_categories = {'all': 'all'}
     
@@ -22,7 +22,7 @@ class kickass_torrent(object):
 
         def __init__(self):
             HTMLParser.__init__(self)
-            self.url = 'https://kickass-cr.online'
+            self.url = 'https://kickass2.biz'
             self.TABLE_INDEX = 1
             self.insideDataTd = False
             self.tdCount = -1
@@ -57,7 +57,7 @@ class kickass_torrent(object):
                 if len(self.singleResData) > 0:
                     #ignore trash stuff
                     if self.singleResData['name'] != '-1' and self.isValidSize(self.singleResData['size']):
-                        prettyPrinter(self.singleResData)
+                        prettyPrinter(self.singleResData) 
                         self.fullResData.append(self.singleResData)
                     self.singleResData = self.getSingleData()
 
@@ -86,13 +86,14 @@ class kickass_torrent(object):
     # This function will be the one called by nova2.py
     def search(self, what, cat='all'):
         currCat = self.supported_categories[cat]
-        what = what.replace('%20','-')
+        #what = what.replace('%20','-')
         parser = self.MyHTMLParser()
         #analyze exact number of pages (but maximum is 25)
-        pageNum = 25
+        pageNum = 10
         currPage = 1
         while currPage <= pageNum:
-            url = self.url+'/search/{0}/{1}/'.format(what,currPage)
+            url = self.url+'/usearch/{0}/{1}/'.format(what,currPage)
+            #print(url)
             html = retrieve_url(url)
             pgNumber = re.search('\s?page\s?\d\s?of\s?(\d+)',html)
             if currPage == 1 and pgNumber and len(pgNumber.groups()) > 0:
