@@ -1,4 +1,4 @@
-#VERSION: 1.7
+#VERSION: 1.8
 #AUTHORS: mauricci
 
 from helpers import retrieve_url
@@ -27,7 +27,8 @@ class kickass_torrent(object):
             self.insideDataTd = False
             self.tdCount = -1
             self.tableCount = -1
-            self.infoMap = {'name':0,'size':1}
+            self.insideTitle = False
+            self.infoMap = {'name':0,'size':1,'seeds':3,'leech':4}
             self.fullResData = []
             self.singleResData = self.getSingleData()
             
@@ -46,6 +47,7 @@ class kickass_torrent(object):
                  Dict = dict(attrs)
                  if self.infoMap['name'] == self.tdCount and 'href' in Dict \
                     and Dict.get('class','').find('cellMainLink') != -1:
+                     self.insideTitle = True
                      self.singleResData['desc_link'] = self.url + Dict['href']
                      self.singleResData['link'] = self.singleResData['desc_link']
 
@@ -66,15 +68,21 @@ class kickass_torrent(object):
                 for key,val in self.infoMap.items():
                     if self.tdCount == val:
                         currKey = key
-                        if currKey in self.singleResData and data.strip() != '':
-                            if self.singleResData[currKey] == '-1':
-                                self.singleResData[currKey] = data.strip()
-                            else:
-                                self.singleResData[currKey] += data.strip()
+                        #torrent's title is an exception
+                        if currKey == 'name' and self.insideTitle:
+                            self.singleResData[currKey] = data.strip()
+                            self.insideTitle = False
+                        if currKey != 'name':
+                            if currKey in self.singleResData and data.strip() != '':
+                                if self.singleResData[currKey] == '-1':
+                                    self.singleResData[currKey] = data.strip()
+                                else:
+                                    self.singleResData[currKey] += data.strip()
 
         def feed(self,html):
             HTMLParser.feed(self,html)
             self.insideDataTd = False
+            self.insideTitle = False
             self.tdCount = -1
             self.tableCount = -1
 
@@ -88,7 +96,7 @@ class kickass_torrent(object):
         currCat = self.supported_categories[cat]
         #what = what.replace('%20','-')
         parser = self.MyHTMLParser()
-        #analyze exact number of pages (but maximum is 25)
+        #analyze 10 pages
         pageNum = 10
         currPage = 1
         while currPage <= pageNum:
