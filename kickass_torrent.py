@@ -105,6 +105,8 @@ class kickass_torrent(object):
             html = retrieve_url(url)
             parser.feed(html)
             currPage += 1
+            if len(parser.fullResData) <= 0:
+                break
         #print(parser.fullResData)   
         data = parser.fullResData
         print(len(data))

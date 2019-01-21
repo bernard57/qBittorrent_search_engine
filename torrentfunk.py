@@ -96,6 +96,8 @@ class torrentfunk(object):
             #print(url)
             html = retrieve_url(url)
             parser.feed(html)
+            if len(parser.fullResData) <= 0:
+                break
         #print(parser.fullResData)
         data = parser.fullResData
         parser.close()

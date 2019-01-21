@@ -93,6 +93,8 @@ class solotorrent(object):
             #print(url)
             html = self.getHtml(url)
             parser.feed(html)
+            if len(parser.fullResData) <= 0:
+                break
         data = parser.fullResData
         parser.close()
 
